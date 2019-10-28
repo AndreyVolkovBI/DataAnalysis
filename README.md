@@ -1,5 +1,5 @@
-# Multidimensional data analysis
-# Gross home assignment
+## Multidimensional data analysis - Gross home assignment 
+## Andrey Volkov, BBI 174
 
 
 ### 1. Principal component analysis. Consider Example: Handwritten Digits
@@ -26,6 +26,9 @@ So the PCA finds the best fitting line by maximizing the sum of the square dista
 Because it is only 2-D graph, PC2 is simply the line through the origin that is perpendicular to PC1, without any further optimization that has to be done. 
 The same way to find the singular vector and the eigen vector. To draw the final PCA plot we simply rotate everything, so the PCA1 is horizontal.
 Then we use the projection points to find out where the PCA plot go in the PCA plot.  
+
+Now we can call the `prcomp()` function to do a PCA on our data. With a goal to draw a graph that shows how the variables are related to each other.
+Because by default the function expects the variables be rows and observation to be columns we use `t()` function to transpose our matrix. 
 
 Use `names()` function to explore the result of the PCA.
 ~~~
@@ -59,3 +62,6 @@ plot(pca3$x[,2], pca3$x[,3])
 plot(pca3$x[,3], pca3$x[,4])
 ~~~
 ![](media/PCA4.png)
+
+
+### 2. Bias-variance trade-off. Let N be the total length of your first and last names. Also, choose a random number a ∈ [0.4, 0.6] and round it to one decimal place.
