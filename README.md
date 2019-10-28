@@ -28,18 +28,45 @@ The same way to find the singular vector and the eigen vector. To draw the final
 Then we use the projection points to find out where the PCA plot go in the PCA plot.  
 
 Now we can call the `prcomp()` function to do a PCA on our data. With a goal to draw a graph that shows how the variables are related to each other.
-Because by default the function expects the variables be rows and observation to be columns we use `t()` function to transpose our matrix. 
+Because by default the function expects the variables to be columns and observation to be rows we can use `t()` function to transpose our matrix. 
 
-Use `names()` function to explore the result of the PCA.
-~~~
-names(pca3) # "sdev" "rotation" "center" "scale" "x"
-~~~
 In order to extract all the PCAs, we have to call `x` variable on our PCA object.
 Plotting the data is rather simple by just calling the `plot()` function with PCA1 and PCA2.
+
+The `prcomp()` function returns 3 variables: x, sdev and rotation.
+
+To have a better understanding let us see how much variation in the original data PC1 accounts for. We can calculate the square of standard deviation.
+And then calculate the percentages of the variance. Finally, use `barplot()` function to plot the result.  
+~~~r
+pca3.variance <- pca3$sdev^2
+pca3.variance.percentages <- round(pca3.variance/sum(pca3.variance)*100, 1)
+barplot(pca3.var.per, main="Scree Plot - Handwritten Digits", xlab="Principal Component", ylab="Percent Variation", xlim=c(0, 30))
 ~~~
-plot(pca3$x[,1], pca3$x[,2])
+<div style="text-align:center">
+<img src="media/task1/scree_plot_handwritten_digits.png" width="700">
+</div>
+
+We can see that first 2 components accounts for the majority of the variation of the data.
+
+
+~~~r
+pca3.data <- data.frame(Sample=rownames(pca3$x), X = pca3$x[,1], Y = pca3$x[,2])
+
+ggplot(data = pca3.data, aes(X, Y, label=Sample)) + geom_point() +
+  xlab(paste("PC1 - ", pca3.var.per[1], "%", sep="")) +
+  ylab(paste("PC2 - ", pca3.var.per[2], "%", sep="")) +
+  theme_bw() + ggtitle("Handwritten Digit 3 PCA Graph")
 ~~~
-![](media/PCA2.png)
+<div style="text-align:center">
+<img src="media/task1/handwritten_digit_3_PCA_graph.png" width="700">
+</div>
+
+
+
+
+
+
+ 
 
 Now let us create the gif image that shows, how all PCAs one by one makes better picture of how each of data points related to each other.
 In separate folder create an image of each PCAs.
