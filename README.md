@@ -1,4 +1,4 @@
-## Multidimensional data analysis - Gross home assignment 
+# Multidimensional data analysis - Gross home assignment 
 ## Andrey Volkov, BBI 174
 
 
@@ -8,7 +8,7 @@ a) Perform the PCA for these data (perhaps, via singular value decomposition)
 
 First, let us declare the variable of base data set link and read all the observations to variable "digits3".
 Let us use `prcomp()` function to perform a principal component analysis on our data set, using `t()` function to transpose data set. 
-~~~
+~~~python
 baseDataSetLink <- "https://web.stanford.edu/~hastie/ElemStatLearn/datasets/zip.digits/train.%s"
 
 digit3 <- read.csv(sprintf(baseDataSetLink, 3), header = FALSE)
