@@ -4,7 +4,7 @@
 
 ### 1. Principal component analysis. Consider Example: Handwritten Digits
 
-a) Perform the PCA for these data (perhaps, via singular value decomposition)
+#### a) Perform the PCA for these data (perhaps, via singular value decomposition)
 
 First, let us declare the variable of base data set link and read all the observations to variable "digits3".
 Let us use `prcomp()` function to perform a principal component analysis on our data set, using `t()` function to transpose data set. 
@@ -38,30 +38,53 @@ The `prcomp()` function returns 3 variables: x, sdev and rotation.
 To have a better understanding let us see how much variation in the original data PC1 accounts for. We can calculate the square of standard deviation.
 And then calculate the percentages of the variance. Finally, use `barplot()` function to plot the result.  
 ~~~r
-pca3.variance <- pca3$sdev^2
-pca3.variance.percentages <- round(pca3.variance/sum(pca3.variance)*100, 1)
-barplot(pca3.var.per, main="Scree Plot - Handwritten Digits", xlab="Principal Component", ylab="Percent Variation", xlim=c(0, 30))
+makeBarPlot <- function(pca) {
+  pca.variance.percentages <- round(pca$sdev^2 / sum(pca$sdev^2) * 100, 1)
+  
+  barplot(
+    pca.variance.percentages,
+    main="Scree Plot - Handwritten Digits", 
+    xlab="Principal Component", 
+    ylab="Percent Variation", 
+    xlim=c(0, 30)
+  )
+}
+
+makeBarPlot(pca3)
 ~~~
 <div style="text-align:center">
 <img src="media/task1/scree_plot_handwritten_digits.png" width="700">
 </div>
 
+#### b) Reproduce Figure 14.23 showing the relevant code. Discuss the plot. Take another digit (other than 3) and repeat.
 We can see that first 2 components accounts for the majority of the variation of the data.
-
-
+Now let us make the PC1 and PC2 2-D plot, By choosing first and second column in the result for `x` in PCA.
 ~~~r
-pca3.data <- data.frame(Sample=rownames(pca3$x), X = pca3$x[,1], Y = pca3$x[,2])
+makePCAPlot <- function(pca) {
+  pca.variance.percentages <- round(pca$sdev^2 / sum(pca$sdev^2) * 100, 1)
+  pca.data <- data.frame(Sample=rownames(pca$x), X = pca$x[,1], Y = pca$x[,2])
+  
+  ggplot(data = pca.data, aes(X, Y, label=Sample)) + geom_point(color = "steelblue") +
+    xlab(paste("PC1 - ", pca.variance.percentages[1], "%", sep="")) +
+    ylab(paste("PC2 - ", pca.variance.percentages[2], "%", sep="")) +
+    theme_bw() + ggtitle("Handwritten Digit 3 PCA Graph")
+}
 
-ggplot(data = pca3.data, aes(X, Y, label=Sample)) + geom_point() +
-  xlab(paste("PC1 - ", pca3.var.per[1], "%", sep="")) +
-  ylab(paste("PC2 - ", pca3.var.per[2], "%", sep="")) +
-  theme_bw() + ggtitle("Handwritten Digit 3 PCA Graph")
+makePCAPlot(pca3)
 ~~~
 <div style="text-align:center">
 <img src="media/task1/handwritten_digit_3_PCA_graph.png" width="700">
 </div>
 
 
+Now, let us take another digit - 5 and compare the differences.
+~~~r
+digit5 <- read.csv(sprintf(baseDataSetLink, 5), header = FALSE)
+pca5 <- prcomp(t(digit5), scale = TRUE)
+
+makeBarPlot(pca5)
+makePCAPlot(pca5)
+~~~
 
 
 
