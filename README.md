@@ -22,8 +22,8 @@ Now, when data is centered on the origin, we can try to fit a line to it. To do 
 To quantify how good this line fits the data, PCA projects the data onto it.
 And then it finds the line that that maximizes the distances from the projection points to the origin.
 
-So the PCA finds the best fitting line by maximizing the sum of the square distances from the projected point to the origin. 
-So, for this line, PCA projects the data onto it and then measures the distance from this point to the origin. (d1, d2, d3, ...) -> (d1^2 + d2^2 + d3^3 + ...) = SS (distances). 
+So the PCA finds the best fitting line by maximizing the sum of the square distances from  projected point to the origin. 
+So, for this line, PCA projects the data onto it and then measures the distance from this potheint to the origin. (d1, d2, d3, ...) -> (d1^2 + d2^2 + d3^3 + ...) = SS (distances). 
 So, therefore we find the line with the largest sum of squares distances. This line is called the PC1 - Principal component 1. 
 
 Because it is only 2-D graph, PC2 is simply the line through the origin that is perpendicular to PC1, without any further optimization that has to be done. 
@@ -106,6 +106,9 @@ Here the graphs are rather the same with the exception of wider scatter in the p
 <img src="media/task1/c_pca_equation.png" width="400">
 </div>
 
+In this equation the first parameter is the average vector represented as image for all of the 256 variables.
+The v1 - eigenvector for PC1 and v2 - eigenvector for PC2. So, it is a graphical interpretation of the new parameter (λ). 
+
 Let us create function that has a parameter with vector and creates an image
 ~~~r
 makeImage <- function(vector) {
@@ -113,7 +116,7 @@ makeImage <- function(vector) {
   image(-matrix_[,ncol(matrix_):1], axes = F, col = grey(seq(0, 1, length = 256)))
 }
 ~~~
-Now we can simply call this function and get desired result
+In order to get the first three, we can simply call `colMeans()` function to get the average value for each column and call our `makeImage()` function giving this parameter.
 ~~~r
 makeImage(colMeans(digit3))
 ~~~
@@ -121,26 +124,70 @@ makeImage(colMeans(digit3))
 <img src="media/task1/c_medium_3_digit.png" width="100">
 </div>
 
+In order to use PC scores, and result of SVD, let us call function `PCA()` from `FactoMineR` package and get needed variables.
+And now we can access eigenvectors (first and second ones) to draw the corresponding images.
 ~~~r
-makeImage(pca3$x[,2])
+digits3_pca <- PCA(digits3)
+makeImage(digits3_pca$svd$V[,1])
 ~~~
 <div style="text-align:center">
 <img src="media/task1/c_3_1_component_digit.png" width="100">
 </div>
 
 ~~~r
-makeImage(pca3$x[,3])
+makeImage(digits3_pca$svd$V[,2])
 ~~~
 <div style="text-align:center">
 <img src="media/task1/c_3_2_component_digit.png" width="100">
 </div>
 
+Here we displayed first two principal components directions - two vectors as images. In total, there are 256 PCs, however, as I mentioned in point (a), first two ones accounts for the majority of variation in the data.
+Having a closer look, we can notice that the v1 (horizontal movement) mainly accounts for the lengthening of the lower tail of the three, at the same time v2 (vertical movement) accounts for character thickness. 
+
 #### d) Using the PC scores for some observation, reconstruct it in the original space, visualize it and compare the reconstructed image with the original one
-In order to use PC scores, and result of SVD, let us call function `PCA()` from `FactoMineR` package and get needed variables.
 
- 
+Let us use fourth observation and make a plot for each 
 
-
+~~~
+makeImage(pca3$x[,4])
+makeImage(digits3[4,])
+~~~
 
 
 ### 2. Bias-variance trade-off. Let N be the total length of your first and last names. Also, choose a random number a ∈ [0.4, 0.6] and round it to one decimal place.
+
+#### a, b) Generate 80 observations containing N independent variables Xi , i = 1, ..., N (predictors) and one response Y . All of the predictors are distributed over the interval [0, 1] independently and uniformly. This is your training set. The response variable takes just two values, 0 and 1. Generate a separate test set of 100 points.
+
+Let us declare basic variables and functions to generate matrices of observations and result one.  
+
+~~~r
+n = 12 # length(Andrey Volkov) == 12
+a <- round(runif(1, 0.4, 0.6), 1) # generate and round random distribution
+
+# generates matrix of ${observation_count} observations
+getX <- function (observationCount) {
+  return (matrix(runif(n, 0, 1), observationCount, n))
+}
+
+# crates Y result vector for specific X matrix by specific rule
+getY <- function(observations) {
+  observationsCount <- length(observations[,1])
+  Y <- matrix(0, observationsCount, 1)
+  for(i in 1:observationsCount) { if (observations[i, 1] > a) { Y[i,1] <- 1 } }
+  return (Y)
+}
+~~~
+
+Now, we can call the above functions and prepare the training and test sets. 
+
+~~~r
+xTrain = getX(80)
+yTrain = getY(xTrain)
+
+xTest = getX(100)
+yTest = getY(xTest)
+~~~
+
+c) Consider the KNN regression (set prob=T in the knn command; also, use attr(knnModel,"prob") to get the vote probabilities).
+
+
