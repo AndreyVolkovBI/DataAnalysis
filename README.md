@@ -51,7 +51,7 @@ makeBarPlot(pca3, 3)
 <img src="media/task1/a_scree_plot_handwritten_digits.png" width="700">
 </div>
 
-We can see that first 2 components accounts for the majority of the variation of the data.
+We can see that first 2 components accounts for the majority of the variation of the data. At the same time first 15 components accounts for 80% of the total variation and 34 components for 90%. 
 
 #### b) Reproduce Figure 14.23 showing the relevant code. Discuss the plot. Take another digit (other than 3) and repeat.
 Now let us make the PC1 and PC2 2-D plot, By choosing first and second column in the result for `x` in PCA.
@@ -74,13 +74,7 @@ makePCAPlot(pca3, 3)
 <img src="media/task1/b_handwritten_digit_3_PCA_graph.png" width="700">
 </div>
 
-~~~
-makePCAPlot(pca3, 3)
-~~~
-<div style="text-align:center">
-<img src="media/task1/b_handwritten_digit_3_PCA_graph.png" width="700">
-</div>
-
+First two principal components with corresponding percentage of variance.
 
 Now, let us take another digit - 5 and compare the differences.
 ~~~r
@@ -94,14 +88,17 @@ makeBarPlot(pca5, 5)
 <img src="media/task1/b_scree_plot_handwritten_digits_5.png" width="700">
 </div>
 
+Comparing the results from the previous observation, here only first three principal components accounts for the majority of the variation of the data (52%). 
+But the following columns are bigger in comparison with previous plot. So, first 17 principal components accounts for 80% of the whole variation and first 36 for 90%. 
 ~~~
-makeBarPlot(pca5, 5)
+makePCAPlot(pca5, 5)
 ~~~
 
 <div style="text-align:center">
 <img src="media/task1/b_handwritten_digit_5_PCA_graph.png" width="700">
 </div>
 
+Here the graphs are rather the same with the exception of wider scatter in the previous one.
 
 #### c) Explain in words Eq.(14.55) in detail (structure, in what basis it is written, possible use). Use the PCA terminology (e.g., “scores”, etc).
 
