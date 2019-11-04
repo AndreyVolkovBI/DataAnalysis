@@ -148,11 +148,19 @@ Having a closer look, we can notice that the v1 (horizontal movement) mainly acc
 
 Let us use fourth observation and make a plot for each 
 
+~~~r
+makeImage(digits3_pca$svd$V[,4])
 ~~~
-makeImage(pca3$x[,4])
+<div style="text-align:center">
+<img src="media/task1/d_reconstruct_1.png" width="100">
+</div>
+
+~~~r
 makeImage(digits3[4,])
 ~~~
-
+<div style="text-align:center">
+<img src="media/task1/d_reconstruct_2.png" width="100">
+</div>
 
 ### 2. Bias-variance trade-off. Let N be the total length of your first and last names. Also, choose a random number a ∈ [0.4, 0.6] and round it to one decimal place.
 
@@ -296,7 +304,7 @@ plot(variance, type = 'l', col ='blue', xlab = "Number of neighbors, k", ylab = 
 <img src="media/task2/variance_against_number_of_nearest_neighbours.png" width="700">
 </div>
 
-Finally, let us plot the results on top of the test error graph
+Finally, let us plot the results on top of the test error graph.
 
 ~~~r
 plot(bias, type = 'l', col = 'green', ylim = c(0,1), xlim = c(0,30), main = "Bias on top of test error graph")
@@ -305,3 +313,19 @@ lines(errorTest, col = 'blue')
 <div style="text-align:center">
 <img src="media/task2/bias_on_top_of_error_graph.png" width="700">
 </div>
+
+Summarizing, high bias can cause an algorithm to miss the relevant relations between features and target outputs. 
+In other words, model with high bias pays very little attention to the training data and oversimplifies the model.
+
+High variance can cause an algorithm to model the random noise in the training data, rather than the intended outputs. 
+In other words, model with high variance pays a lot of attention to training data and does not generalize 
+on the data which it has not seen before.
+
+
+### 3. Cross validation. Generate a single dataset described in item 2a. Increase the number of observations to 200. For this dataset, perform a leave-one-out, 5-fold and 10-fold cross validation using the KNN regression. Note that you may have to code the cross validation on your own unless you find an appropriate R function. Compare the results with the true test error (item 2d). Select the best model.
+
+First, let us generate a single dataset with 200 observations, in order to do this we can call function we used previously.
+
+~~~r
+dataset = getX(200)
+~~~
