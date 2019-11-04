@@ -242,10 +242,43 @@ And plot the graph in the same way we did previously.
 errorTraining <- getError(k_num = 30, xTrain, xTrain, yTrain, yTrain)
 plot(
   errorTraining, type = "l", col = "green", 
-  xlab = "Number of nearest neighbors, k", ylab = "Training MSE", main = "Training MSE against the number of nearest neighbor"s
+  xlab = "Number of nearest neighbors, k", ylab = "Training MSE", main = "Training MSE against the number of nearest neighbor"
 )
 ~~~
 
 <div style="text-align:center">
 <img src="media/task2/training_mse_against_number_of_nearest_neighbour.png" width="700">
 </div>
+
+
+#### f) Compute and plot the bias and variance against the number of nearest neighbors. Do plotting on top of the test error graph, item 2d. Note that to compute the bias and variance you need to average over multiple training sets whereas the test set remains the same. Discuss the obtained plots.
+
+~~~r
+bias = matrix(0, k_num, 1)
+variance = matrix(0, k_num, 1)
+
+for(m in 1:k_num){
+  regression = matrix(0, 100, 1)
+  for(s in 1:70){
+    xTrainSet = matrix(runif(n, 0, 1), 80, n)
+    yTrainSet = matrix(0, 80, 1)
+    for(i in 1:80) { if (xTrainSet[i, 1] > a) { yTrainSet[i,1] = 1 } }
+    knnBV = knn(xTrainSet, xTest, yTrainSet, prob = T, k = m) 
+    probBV = attr(knnBV, "prob")
+    regression = regression + probBV * (as.numeric(knnBV) - 1) + (1 - probBV) * (1 - (as.numeric(knnBV) - 1))
+  }
+  averageKnn = regression / 70
+  
+  variance[m] = mean((averageKnn - regression) ^ 2)
+  bias[m]=mean((averageKnn - yTest) ^ 2)
+}
+
+plot(bias, type = 'l', col ='red', xlab = "k, number of neighbors", ylab = "Bias",
+     main = "Bias vs Neighbors")
+plot(bias, type = 'l', col = 'red', ylim = c(0,1), xlim = c(0,30))
+lines(errorTest, col = 'green')
+plot(variance, type = 'l', col ='blue',xlab = "k, number of neighbors", ylab = "Variance",
+     main = "Variance MSE vs Neighbors")
+lines(errorTraining, type = 'l', col = 'green')
+
+~~~
