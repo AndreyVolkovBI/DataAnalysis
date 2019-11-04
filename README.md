@@ -158,9 +158,12 @@ makeImage(digits3[4,])
 
 #### a, b) Generate 80 observations containing N independent variables Xi , i = 1, ..., N (predictors) and one response Y . All of the predictors are distributed over the interval [0, 1] independently and uniformly. This is your training set. The response variable takes just two values, 0 and 1. Generate a separate test set of 100 points.
 
-Let us declare basic variables and functions to generate matrices of observations and result one.  
+Let us declare basic variables and functions to generate matrices of observations and result one.
 
 ~~~r
+library(gmodels)
+library(class)
+
 n = 12 # length(Andrey Volkov) == 12
 a <- round(runif(1, 0.4, 0.6), 1) # generate and round random distribution
 
@@ -178,7 +181,7 @@ getY <- function(observations) {
 }
 ~~~
 
-Now, we can call the above functions and prepare the training and test sets. 
+Now, we can call the above functions and prepare the training and test sets.
 
 ~~~r
 xTrain = getX(80)
@@ -190,4 +193,59 @@ yTest = getY(xTest)
 
 c) Consider the KNN regression (set prob=T in the knn command; also, use attr(knnModel,"prob") to get the vote probabilities).
 
+In this point we consider KNN regression that basically stores all possible cases anf predict the numerical target based on distance function.
+Now, let us create function for getting error for knn regression. Here we make a matrix with fixed number of "K" rows of error.
+Then we calculate knn regression using `knn()` function, add "prob" attribute and compute the estimated values of Y according to the given formula. 
 
+~~~r
+# Check knn prediction with different k levels
+getError <- function(k_num, xTrain_, xTest_, yTrain_, yTest_) {
+  error <- matrix(0, k_num, 1)
+  
+  for (i in 1:k_num) {
+    knnPred <- knn(xTrain_, xTest_, yTrain_, prob = T, k = i)
+    probPred <- attr(knnPred, "prob")
+    
+    reg <- probPred * (as.numeric(knnPred) - 1) + (1 - probPred) * (1 - (as.numeric(knnPred) - 1))
+    error[i] <- mean((reg - yTest_) ^ 2)
+  }
+  
+  return (error)
+}
+~~~
+
+Now, we can simply call `getError()` function with k=30 and get the desired output.
+
+~~~r
+errorTest <- getError(k_num = 30, xTrain, xTest, yTrain, yTest)
+~~~
+
+d) Plot the test MSE against the number of nearest neighbors.
+
+~~~r
+plot(
+  errorTest, type = "l", col = "blue", 
+  xlab = "Number of nearest neighbors, k", ylab = "Test MSE", main = "Test MSE against the number of nearest neighbors"
+)
+~~~
+
+<div style="text-align:center">
+<img src="media/task2/test_mse_against_number_of_nearest_neighbours.png" width="100">
+</div>
+
+e) Plot the training MSE against the number of nearest neighbors.
+
+In order to plot training MSE against the number of nearest neighbors, let us run knn error algorithm doubling xTrain and yTrain parameters.
+And plot the graph in the same way we did previously.
+
+~~~r
+errorTraining <- getError(k_num = 30, xTrain, xTrain, yTrain, yTrain)
+plot(
+  errorTraining, type = "l", col = "green", 
+  xlab = "Number of nearest neighbors, k", ylab = "Training MSE", main = "Training MSE against the number of nearest neighbor"s
+)
+~~~
+
+<div style="text-align:center">
+<img src="media/task2/training_mse_against_number_of_nearest_neighbour.png" width="100">
+</div>
