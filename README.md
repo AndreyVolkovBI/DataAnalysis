@@ -162,6 +162,9 @@ makeImage(digits3[4,])
 <img src="media/task1/d_reconstruct_2.png" width="100">
 </div>
 
+Comparing the pictures, we can see that the first one contains lot of gray pixels, while the second one does not.
+Also, the second picture has is way more focused then the first one.
+
 ### 2. Bias-variance trade-off. Let N be the total length of your first and last names. Also, choose a random number a ∈ [0.4, 0.6] and round it to one decimal place.
 
 #### a, b) Generate 80 observations containing N independent variables Xi , i = 1, ..., N (predictors) and one response Y . All of the predictors are distributed over the interval [0, 1] independently and uniformly. This is your training set. The response variable takes just two values, 0 and 1. Generate a separate test set of 100 points.
