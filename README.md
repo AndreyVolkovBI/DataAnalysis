@@ -295,3 +295,13 @@ plot(variance, type = 'l', col ='blue', xlab = "Number of neighbors, k", ylab = 
 <div style="text-align:center">
 <img src="media/task2/variance_against_number_of_nearest_neighbours.png" width="700">
 </div>
+
+Finally, let us plot the results on top of the test error graph
+
+~~~r
+plot(bias, type = 'l', col = 'green', ylim = c(0,1), xlim = c(0,30), main = "Bias on top of test error graph")
+lines(errorTest, col = 'blue')
+~~~
+<div style="text-align:center">
+<img src="media/task2/bias_on_top_of_error_graph.png" width="700">
+</div>
