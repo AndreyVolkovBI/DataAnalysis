@@ -191,7 +191,7 @@ xTest = getX(100)
 yTest = getY(xTest)
 ~~~
 
-c) Consider the KNN regression (set prob=T in the knn command; also, use attr(knnModel,"prob") to get the vote probabilities).
+#### c) Consider the KNN regression (set prob=T in the knn command; also, use attr(knnModel,"prob") to get the vote probabilities).
 
 In this point we consider KNN regression that basically stores all possible cases anf predict the numerical target based on distance function.
 Now, let us create function for getting error for knn regression. Here we make a matrix with fixed number of "K" rows of error.
@@ -220,7 +220,7 @@ Now, we can simply call `getError()` function with k=30 and get the desired outp
 errorTest <- getError(k_num = 30, xTrain, xTest, yTrain, yTest)
 ~~~
 
-d) Plot the test MSE against the number of nearest neighbors.
+#### d) Plot the test MSE against the number of nearest neighbors.
 
 ~~~r
 plot(
@@ -230,10 +230,10 @@ plot(
 ~~~
 
 <div style="text-align:center">
-<img src="media/task2/test_mse_against_number_of_nearest_neighbours.png" width="100">
+<img src="media/task2/test_mse_against_number_of_nearest_neighbours.png" width="700">
 </div>
 
-e) Plot the training MSE against the number of nearest neighbors.
+#### e) Plot the training MSE against the number of nearest neighbors.
 
 In order to plot training MSE against the number of nearest neighbors, let us run knn error algorithm doubling xTrain and yTrain parameters.
 And plot the graph in the same way we did previously.
@@ -247,5 +247,5 @@ plot(
 ~~~
 
 <div style="text-align:center">
-<img src="media/task2/training_mse_against_number_of_nearest_neighbour.png" width="100">
+<img src="media/task2/training_mse_against_number_of_nearest_neighbour.png" width="700">
 </div>
